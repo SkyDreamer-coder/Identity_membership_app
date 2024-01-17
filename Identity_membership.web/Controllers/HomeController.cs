@@ -1,4 +1,6 @@
 using Identity_membership.web.Models;
+using Identity_membership.web.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,9 +10,12 @@ namespace Identity_membership.web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly UserManager<UserApp> _userManager;
+
+        public HomeController(ILogger<HomeController> logger, UserManager<UserApp> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -20,6 +25,32 @@ namespace Identity_membership.web.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        public IActionResult Signup()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Signup(SignUpVM req)
+        {
+
+            var result = await _userManager.CreateAsync(new() { UserName = req.UserName, PhoneNumber = req.Phone, Email = req.Email }, req.PasswordConfirm);
+
+            if(result.Succeeded) 
+            {
+                TempData["SuccessMessage"] = "Üyelik iþlemi baþarýyla gerçekleþti.";
+                return RedirectToAction(nameof(HomeController.Signup));
+            }
+
+            foreach(IdentityError err in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, err.Description);
+            }
+
             return View();
         }
 
