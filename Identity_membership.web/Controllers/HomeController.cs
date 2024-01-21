@@ -28,22 +28,27 @@ namespace Identity_membership.web.Controllers
             return View();
         }
 
-        public IActionResult Signup()
+        public IActionResult SignUp()
         {
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Signup(SignUpVM req)
+        public async Task<IActionResult> SignUp(SignUpVM req)
         {
+
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
 
             var result = await _userManager.CreateAsync(new() { UserName = req.UserName, PhoneNumber = req.Phone, Email = req.Email }, req.PasswordConfirm);
 
-            if(result.Succeeded) 
+            if (result.Succeeded) 
             {
                 TempData["SuccessMessage"] = "Üyelik iþlemi baþarýyla gerçekleþti.";
-                return RedirectToAction(nameof(HomeController.Signup));
+                return RedirectToAction(nameof(HomeController.SignUp));
             }
 
             foreach(IdentityError err in result.Errors)
