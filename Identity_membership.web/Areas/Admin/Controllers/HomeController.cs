@@ -1,0 +1,43 @@
+﻿using Identity_membership.web.Areas.Admin.Models;
+using Identity_membership.web.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace Identity_membership.web.Areas.Admin.Controllers
+{
+
+    [Area("Admin")]
+    public class HomeController : Controller
+    {
+
+        private readonly UserManager<UserApp> _userManager;
+
+        public HomeController(UserManager<UserApp> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+        public async Task<IActionResult> UserList()
+        {
+            var userList = await _userManager.Users.ToListAsync();
+
+            var userVMList = userList.Select(x => new UserVM()
+            {
+                Id = x.Id,
+                Email = x.Email,
+                Name = x.UserName
+
+            }).ToList();
+
+            return View(userVMList);
+        }
+
+    }
+}
