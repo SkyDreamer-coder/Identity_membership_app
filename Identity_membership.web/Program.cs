@@ -1,3 +1,4 @@
+using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
 });
 
-builder.Services.AddIdentity<UserApp,UserRoleApp>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentityExtensions();
 
 var app = builder.Build();
 
