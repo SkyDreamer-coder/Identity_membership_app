@@ -3,6 +3,7 @@ using Identity_membership.web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Identity_membership.web.Extensions;
 
 namespace Identity_membership.web.Controllers
 {
@@ -12,10 +13,13 @@ namespace Identity_membership.web.Controllers
 
         private readonly UserManager<UserApp> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<UserApp> userManager)
+        private readonly SignInManager<UserApp> _signInManager; // user login, logout, cookie operations
+
+        public HomeController(ILogger<HomeController> logger, UserManager<UserApp> userManager, SignInManager<UserApp> signInManager)
         {
             _logger = logger;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -30,6 +34,36 @@ namespace Identity_membership.web.Controllers
 
         public IActionResult SignUp()
         {
+
+            return View();
+        }
+
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInVM req, string? returnUrl = null)
+        {
+            returnUrl = returnUrl ?? Url.Action("Index", "Home");
+
+            var userVal = await _userManager.FindByEmailAsync(req.Email);
+
+            if (userVal == null) 
+            {
+                ModelState.AddModelError(string.Empty, "Email veya þifre yanlýþ");
+                return View();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(userVal, req.Password, req.RememberMe, false);
+
+            if(result.Succeeded) 
+            {
+                return Redirect(returnUrl);
+            }
+
+            ModelState.AddModelErrorList(new List<string>() { "Email veya þifre yanlýþ." });
 
             return View();
         }
@@ -51,10 +85,9 @@ namespace Identity_membership.web.Controllers
                 return RedirectToAction(nameof(HomeController.SignUp));
             }
 
-            foreach(IdentityError err in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, err.Description);
-            }
+
+            ModelState.AddModelErrorList(result.Errors.Select(x=>x.Description).ToList());
+   
 
             return View();
         }
