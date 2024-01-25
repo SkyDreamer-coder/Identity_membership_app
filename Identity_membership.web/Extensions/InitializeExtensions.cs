@@ -1,4 +1,5 @@
 ﻿using Identity_membership.web.CustomValidations;
+using Identity_membership.web.Localizations;
 using Identity_membership.web.Models;
 
 namespace Identity_membership.web.Extensions
@@ -16,7 +17,9 @@ namespace Identity_membership.web.Extensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
 
-            }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>().AddEntityFrameworkStores<AppDbContext>();
+            }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>
+            ().AddErrorDescriber<LocalizationIdentityErrorDescriber>
+            ().AddEntityFrameworkStores<AppDbContext>();
         }
     }
 }
