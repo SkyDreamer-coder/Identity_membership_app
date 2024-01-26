@@ -56,14 +56,20 @@ namespace Identity_membership.web.Controllers
                 return View();
             }
 
-            var result = await _signInManager.PasswordSignInAsync(userVal, req.Password, req.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(userVal, req.Password, req.RememberMe, true);
 
             if(result.Succeeded) 
             {
                 return Redirect(returnUrl);
             }
 
-            ModelState.AddModelErrorList(new List<string>() { "Email veya þifre yanlýþ." });
+            if(result.IsLockedOut)
+            {
+                ModelState.AddModelErrorList(new List<string>() { "Ard arda 3 kere hatalý giriþ yaptýnýz. Hesabýnýz geçici olarak kilitlendi." });
+                return View();
+            }
+
+            ModelState.AddModelErrorList(new List<string>() { $"Email veya þifre yanlýþ", $"Baþarýsýz giriþ sayýsý = {await _userManager.GetAccessFailedCountAsync(userVal)} / {_userManager.Options.Lockout.MaxFailedAccessAttempts}." });
 
             return View();
         }
