@@ -46,7 +46,7 @@ namespace Identity_membership.web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInVM req, string? returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Action("Index", "Home");
+            //returnUrl = returnUrl ?? Url.Action("Index", "Home");
 
             var userVal = await _userManager.FindByEmailAsync(req.Email);
 
@@ -60,8 +60,8 @@ namespace Identity_membership.web.Controllers
 
             if(result.Succeeded) 
             {
-                //return RedirectToAction("Index", "Member");
-                return Redirect(returnUrl);
+                return RedirectToAction("Index", "Member");
+                //return Redirect(returnUrl);
             }
 
             if(result.IsLockedOut)
