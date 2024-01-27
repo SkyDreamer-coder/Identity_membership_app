@@ -14,6 +14,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddIdentityExtensions();
 
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    // cookie builder instance
+    var cookieBuilder = new CookieBuilder();
+    cookieBuilder.Name = "UserAppCookie";
+
+    // The redirect path if user not logged in the page
+    opt.LoginPath = new PathString("/Home/SignIn");
+
+    // cookie options
+    opt.Cookie = cookieBuilder;
+    opt.ExpireTimeSpan = TimeSpan.FromDays(60);
+    opt.SlidingExpiration = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
