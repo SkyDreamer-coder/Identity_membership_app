@@ -3,6 +3,10 @@
     ViewData["Title"] = "SignIn";
 }
 @model SignInVM
+@section Scripts
+{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
 
 <div class="row">
     <div class="col-md-7 offset-md-3">
@@ -29,12 +33,20 @@
                 </div>
             </div>
 
-            <div class="mb-3 form-check">
-                <input class="form-check-input" asp-for="RememberMe" type="checkbox">
-                <label class="form-check-label" asp-for="RememberMe" for="RememberMe" ></label>
-            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-4 form-check">
+                        <input class="form-check-input" asp-for="RememberMe" type="checkbox">
+                        <label class="form-check-label" asp-for="RememberMe" for="RememberMe"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-8">
+                        <a class="btn btn-outline-secondary btn-sm float-end" asp-controller="Home" asp-action="ForgotPassword">Şifremi unuttum</a>
+                    </div>                    
+                </div>
+            </div>            
             <button type="submit" class="btn btn-primary col-md-3 offset-4">Giriş Yap</button>
-
         </form>
     </div>
 </div>

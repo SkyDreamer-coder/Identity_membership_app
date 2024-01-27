@@ -4,22 +4,25 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Identity_membership.web.Extensions;
+using Microsoft.AspNetCore.SignalR;
+using Identity_membership.web.Services;
 
 namespace Identity_membership.web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         private readonly UserManager<UserApp> _userManager;
-
         private readonly SignInManager<UserApp> _signInManager; // user login, logout, cookie operations
+        private readonly IEmailService _emailService;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<UserApp> userManager, SignInManager<UserApp> signInManager)
+
+        public HomeController(ILogger<HomeController> logger, UserManager<UserApp> userManager, SignInManager<UserApp> signInManager, IEmailService emailService)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailService = emailService;
         }
 
         public IActionResult Index()
@@ -97,6 +100,38 @@ namespace Identity_membership.web.Controllers
    
 
             return View();
+        }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordVM req)
+        {
+
+            var userVal = await _userManager.FindByEmailAsync(req.Email);
+
+            if (userVal == null)
+            {
+                ModelState.AddModelError(string.Empty, "Bu email adresine sahip kullanýcý bulunamamýþtýr.");
+                return View();
+            }
+
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(userVal);
+
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = userVal.Id, Token = passwordResetToken }, HttpContext.Request.Scheme);
+
+            // exp link https://localhost:7048?userId=vvhc&token=sbhsbvvzkcvnkzjjdjkgkjdhsg
+
+            // email service
+
+            await _emailService.SendResetPasswordEmail(passwordResetLink!, userVal.Email!);
+
+            TempData["SuccessMessage"] = "Þifre sýfýrlama linki e-posta adresinize gönderilmiþtir";
+
+            return RedirectToAction(nameof(ForgotPassword));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
