@@ -60,6 +60,7 @@ namespace Identity_membership.web.Controllers
 
             if(result.Succeeded) 
             {
+                //return RedirectToAction("Index", "Member");
                 return Redirect(returnUrl);
             }
 
