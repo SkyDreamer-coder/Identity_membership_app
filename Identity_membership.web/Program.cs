@@ -22,6 +22,8 @@ builder.Services.ConfigureApplicationCookie(opt =>
 
     // The redirect path if user not logged in the page
     opt.LoginPath = new PathString("/Home/SignIn");
+    // Logout redirection query
+    opt.LogoutPath = new PathString("/Member/logout");
 
     // cookie options
     opt.Cookie = cookieBuilder;
