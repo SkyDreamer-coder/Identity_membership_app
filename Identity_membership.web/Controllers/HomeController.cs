@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Identity_membership.web.Extensions;
 using Microsoft.AspNetCore.SignalR;
 using Identity_membership.web.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Identity_membership.web.Controllers
 {
@@ -53,7 +54,7 @@ namespace Identity_membership.web.Controllers
 
             var userVal = await _userManager.FindByEmailAsync(req.Email);
 
-            if (userVal == null) 
+            if (userVal == null)
             {
                 ModelState.AddModelError(string.Empty, "Email veya þifre yanlýþ");
                 return View();
@@ -61,13 +62,13 @@ namespace Identity_membership.web.Controllers
 
             var result = await _signInManager.PasswordSignInAsync(userVal, req.Password, req.RememberMe, true);
 
-            if(result.Succeeded) 
+            if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Member");
                 //return Redirect(returnUrl);
             }
 
-            if(result.IsLockedOut)
+            if (result.IsLockedOut)
             {
                 ModelState.AddModelErrorList(new List<string>() { "Ard arda 3 kere hatalý giriþ yaptýnýz. Hesabýnýz geçici olarak kilitlendi." });
                 return View();
@@ -82,22 +83,22 @@ namespace Identity_membership.web.Controllers
         public async Task<IActionResult> SignUp(SignUpVM req)
         {
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
 
             var result = await _userManager.CreateAsync(new() { UserName = req.UserName, PhoneNumber = req.Phone, Email = req.Email }, req.PasswordConfirm);
 
-            if (result.Succeeded) 
+            if (result.Succeeded)
             {
                 TempData["SuccessMessage"] = "Üyelik iþlemi baþarýyla gerçekleþti.";
                 return RedirectToAction(nameof(HomeController.SignUp));
             }
 
 
-            ModelState.AddModelErrorList(result.Errors.Select(x=>x.Description).ToList());
-   
+            ModelState.AddModelErrorList(result.Errors.Select(x => x.Description).ToList());
+
 
             return View();
         }
@@ -133,6 +134,48 @@ namespace Identity_membership.web.Controllers
 
             return RedirectToAction(nameof(ForgotPassword));
         }
+
+        public IActionResult ResetPassword(string userId, string token) 
+        {
+            TempData["userId"] = userId;
+            TempData["token"] = token;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM req)
+        {
+            var userId = TempData["userId"]!.ToString();
+            var token = TempData["token"]!.ToString();
+
+            if (userId == null || token == null)
+            {
+                throw new Exception("Bir hata meydana geldi");
+            }
+
+            var userVal = await _userManager.FindByIdAsync(userId);
+
+            if (userVal == null) 
+            {
+                ModelState.AddModelError(string.Empty, "kullanýcý bulunamamýþtýr.");
+                return View();
+            }
+
+            var result = await _userManager.ResetPasswordAsync(userVal, (string)token, req.PasswordConfirm);
+
+            if(result.Succeeded) 
+            {
+                TempData["SuccessMessage"] = "Þifreniz baþarýyla yenilenmiþtir.";
+            }
+            else
+            {
+                ModelState.AddModelErrorList(result.Errors.Select(x=>x.Description).ToList());
+            }
+
+            return RedirectToAction("SignIn", "Home");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

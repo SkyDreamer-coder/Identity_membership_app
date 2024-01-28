@@ -7,12 +7,13 @@ namespace Identity_membership.web.ViewModels
 
         public SignUpVM() { }
 
-        public SignUpVM(string userName, string email, string phone, string password)
+        public SignUpVM(string userName, string email, string phone, string password, string passwordConfirm)
         {
             UserName = userName;
             Email = email;
             Phone = phone;
             Password = password;
+            PasswordConfirm = passwordConfirm;
         }
 
         [Required(ErrorMessage = "Kullanıcı Ad alanı boş bırakılamaz.")]
