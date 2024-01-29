@@ -50,7 +50,13 @@ namespace Identity_membership.web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInVM req, string? returnUrl = null)
         {
-            //returnUrl = returnUrl ?? Url.Action("Index", "Home");
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            returnUrl ??= Url.Action("Index", "Home");
 
             var userVal = await _userManager.FindByEmailAsync(req.Email);
 
@@ -64,8 +70,8 @@ namespace Identity_membership.web.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Member");
-                //return Redirect(returnUrl);
+                //return RedirectToAction("Index", "Member");
+                return Redirect(returnUrl!);
             }
 
             if (result.IsLockedOut)
@@ -146,15 +152,15 @@ namespace Identity_membership.web.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordVM req)
         {
-            var userId = TempData["userId"]!.ToString();
-            var token = TempData["token"]!.ToString();
+            var userId = TempData["userId"];
+            var token = TempData["token"];
 
             if (userId == null || token == null)
             {
                 throw new Exception("Bir hata meydana geldi");
             }
 
-            var userVal = await _userManager.FindByIdAsync(userId);
+            var userVal = await _userManager.FindByIdAsync(userId.ToString()!);
 
             if (userVal == null) 
             {
@@ -162,7 +168,7 @@ namespace Identity_membership.web.Controllers
                 return View();
             }
 
-            var result = await _userManager.ResetPasswordAsync(userVal, (string)token, req.PasswordConfirm);
+            var result = await _userManager.ResetPasswordAsync(userVal, token.ToString()!, req.PasswordConfirm);
 
             if(result.Succeeded) 
             {
