@@ -177,6 +177,7 @@ namespace Identity_membership.web.Controllers
             else
             {
                 ModelState.AddModelErrorList(result.Errors.Select(x=>x.Description).ToList());
+                return View();
             }
 
             return RedirectToAction("SignIn", "Home");
