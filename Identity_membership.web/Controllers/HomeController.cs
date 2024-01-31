@@ -99,7 +99,7 @@ namespace Identity_membership.web.Controllers
             if (result.Succeeded)
             {
                 TempData["SuccessMessage"] = "Üyelik iþlemi baþarýyla gerçekleþti.";
-                return RedirectToAction(nameof(HomeController.SignUp));
+                return RedirectToAction(nameof(HomeController.SignIn));
             }
 
 

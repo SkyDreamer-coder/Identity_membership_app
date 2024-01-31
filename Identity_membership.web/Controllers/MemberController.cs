@@ -27,8 +27,8 @@ namespace Identity_membership.web.Controllers
 
         public async Task<IActionResult> Index() 
         {
-            var user = await _userManager.FindByNameAsync(User.Identity!.Name!);
-            var userViewModel = new UserVM { Email = user!.Email!, PhoneNumber = user.PhoneNumber, UserName = user.UserName! };
+            var user = (await _userManager.FindByNameAsync(User.Identity!.Name!))!;
+            var userViewModel = new UserVM { Email = user.Email, PhoneNumber = user.PhoneNumber, UserName = user.UserName, PictureUrl = user.Picture };
 
             return View(userViewModel);
         }
@@ -123,6 +123,10 @@ namespace Identity_membership.web.Controllers
                 await req.Picture.CopyToAsync(stream);
 
                 user.Picture = randomFileName;
+            }
+            else
+            {
+                user.Picture = null;
             }
 
             var updateResult =  await _userManager.UpdateAsync(user);

@@ -5,10 +5,16 @@
 @model UserVM
 
 <div class="row">
-    <div class="col-md-6 offset-md-3">
+    <div class="col-md-6 offset-md-3 text-center">
+        <user-picture-thumbnail class="rounded" style="width:400px" picture-url="@Model.PictureUrl"></user-picture-thumbnail>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-6 offset-md-3 text-center">
         <h2>Hoşheldin @User.Identity!.Name</h2>
 
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Kullanıcı Adı</th>
