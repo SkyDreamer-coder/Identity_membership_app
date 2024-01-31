@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model List<AdminModel.RoleVM>
+
+<div class="row">
+    <div class="col-md-6 offset-md-2">
+        <h1>Role Listesi</h1>
+    </div>
+    <div class="col-md-2">
+        <a class="btn btn-primary" asp-controller="Role" asp-action="CreateRole" asp-area="Admin">Rol Ekle</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Role Adı</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+

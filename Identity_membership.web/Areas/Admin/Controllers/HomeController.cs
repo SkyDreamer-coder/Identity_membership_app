@@ -26,17 +26,14 @@ namespace Identity_membership.web.Areas.Admin.Controllers
 
         public async Task<IActionResult> UserList()
         {
-            var userList = await _userManager.Users.ToListAsync();
-
-            var userVMList = userList.Select(x => new UserVM()
+            var users = await _userManager.Users.AsNoTracking().Select(x => new UserVM()
             {
                 Id = x.Id,
-                Email = x.Email,
-                Name = x.UserName
+                Email = x.Email!,
+                Name = x.UserName!
+            }).ToListAsync();        
 
-            }).ToList();
-
-            return View(userVMList);
+            return View(users);
         }
 
     }
