@@ -37,6 +37,59 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return View();
         }
 
+        public async Task<IActionResult> EditRole(string id)
+        {
+            var roleToEdit = await _roleManager.FindByIdAsync(id);
+
+            if (roleToEdit == null)
+            {
+                throw new ArgumentNullException(nameof(roleToEdit), "İlgili rol bulunamadı");
+            }
+
+            return View(new EditRoleVM() { Id = roleToEdit.Id, Name = roleToEdit!.Name! });
+        }
+
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var roleToDelete = await _roleManager.FindByIdAsync(id);
+
+            if (roleToDelete == null)
+            {
+                throw new ArgumentNullException(nameof(roleToDelete), "İlgili rol bulunamadı");
+            }
+            
+            var result = await _roleManager.DeleteAsync(roleToDelete);
+
+            if(!result.Succeeded) 
+            {
+                throw new Exception(result.Errors.Select(x=>x.Description).First());
+            }
+
+            TempData["SuccessMessage"] = "İlgili role silindi";
+
+            return RedirectToAction(nameof(RoleController.Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(EditRoleVM req)
+        {
+
+            var roleToEdit = await _roleManager.FindByIdAsync(req.Id);
+
+            if (roleToEdit == null)
+            {
+                throw new ArgumentNullException(nameof(roleToEdit), "İlgili rol bulunamadı");
+            }
+
+            roleToEdit.Name = req.Name;
+
+            await _roleManager.UpdateAsync(roleToEdit);
+
+            ViewData["SuccessMessage"] = "Role bilgisi güncellendi";
+
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleVM req)  
         {
@@ -48,6 +101,8 @@ namespace Identity_membership.web.Areas.Admin.Controllers
                 ModelState.AddModelErrorList(result.Errors);
                 return View();
             }
+
+            TempData["SuccessMessage"] = "Role oluşturma işlemi başarıyla gerçekleşti";
 
             return RedirectToAction(nameof(RoleController.Index));
         }

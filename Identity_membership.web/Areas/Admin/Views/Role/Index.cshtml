@@ -3,23 +3,29 @@
     ViewData["Title"] = "Index";
 }
 @model List<AdminModel.RoleVM>
-
 <div class="row">
     <div class="col-md-6 offset-md-2">
         <h1>Role Listesi</h1>
     </div>
     <div class="col-md-2">
-        <a class="btn btn-primary" asp-controller="Role" asp-action="CreateRole" asp-area="Admin">Rol Ekle</a>
+        <a class="btn btn-primary" asp-controller="Role" asp-action="CreateRole" asp-area="Admin">Role Ekle</a>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-8 offset-md-2">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-info" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Role Adı</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -29,14 +35,16 @@
                     <tr>
                         <td>@item.Id</td>
                         <td>@item.Name</td>
+                        <td>
+                            <a class="btn btn-success" asp-area="Admin" asp-controller="Role" asp-action="EditRole" asp-route-id="@item.Id">Role Güncelle</a>
+                            <a class="btn btn-danger mx-2 my-1" asp-area="Admin" asp-controller="Role" asp-action="DeleteRole" asp-route-id="@item.Id">Role Sil</a>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-
-
 
 
 
