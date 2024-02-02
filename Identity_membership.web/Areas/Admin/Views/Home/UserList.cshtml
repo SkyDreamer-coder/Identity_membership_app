@@ -5,12 +5,14 @@
 @model List<AdminModel.UserVM>
 <h1>Üye Listesi</h1>
 
-<table class="table table-striped">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Id</th>
             <th>Kullanıcı Adı</th>
             <th>Email</th>
+            <th>Roller</th>
+            <th>Rol İşlemleri</th>
         </tr>
     </thead>
 
@@ -21,6 +23,12 @@
                 <td>@item.Id</td>
                 <td>@item.Name</td>
                 <td>@item.Email</td>
+                <td>
+                    <user-role-names user-id="@item.Id"></user-role-names>
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-controller="Role" asp-action="AssignRoleToUser" asp-route-id="@item.Id">Rol İşlemleri</a>
+                </td>
             </tr>
         }
     </tbody>

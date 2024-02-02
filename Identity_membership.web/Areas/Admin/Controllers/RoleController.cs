@@ -106,5 +106,53 @@ namespace Identity_membership.web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(RoleController.Index));
         }
+
+        public async Task<IActionResult> AssignRoleToUser(string id)
+        {
+            var user = (await _userManager.FindByIdAsync(id))!;
+            ViewBag.userId = id;
+
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var roleVMList = new List<AssignRoleToUserVM>();
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in roles) 
+            {
+                var assignRoleToUserVM = new AssignRoleToUserVM() { Id = role.Id, Name = role.Name! };
+
+                if (userRoles.Contains(role.Name!))
+                {
+                    assignRoleToUserVM.IsExist = true;
+                }
+
+                roleVMList.Add(assignRoleToUserVM);
+            }
+
+            return View(roleVMList);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRoleToUser(string userId, List<AssignRoleToUserVM> reqList)
+        {
+
+            var userToAssign = (await _userManager.FindByIdAsync(userId))!;
+
+            foreach(var role in reqList) 
+            {
+                if(role.IsExist) 
+                {
+                   await _userManager.AddToRoleAsync(userToAssign, role.Name);
+                }
+                else
+                {
+                    //if(await _userManager.IsInRoleAsync(userToAssign,role.Name)) "check this out."
+                    await _userManager.RemoveFromRoleAsync(userToAssign, role.Name);
+                }
+            }
+
+            return RedirectToAction(nameof(HomeController.UserList), "Home");
+        }
     }
 }
