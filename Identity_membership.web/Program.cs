@@ -42,6 +42,8 @@ builder.Services.ConfigureApplicationCookie(opt =>
     // Logout redirection query
     opt.LogoutPath = new PathString("/Member/logout");
 
+    //Authorization access denided path
+    opt.AccessDeniedPath = new PathString("/Member/AccessDenied");
     // cookie options
     opt.Cookie = cookieBuilder;
     opt.ExpireTimeSpan = TimeSpan.FromDays(60);

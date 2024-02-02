@@ -160,5 +160,15 @@ namespace Identity_membership.web.Controllers
         {
             await _signInManager.SignOutAsync();
         }
+        
+        public IActionResult AccessDenied(string ReturnUrl)
+        {
+            string message = string.Empty;
+            message = "Bu sayfayı görmeye yetkiniz yoktur. Yetki almak için yöneticiniz ile görüşün.";
+
+            ViewBag.message = message;
+
+            return View();
+        }
     }
 }

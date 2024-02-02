@@ -1,12 +1,13 @@
 ﻿using Identity_membership.web.Areas.Admin.Models;
 using Identity_membership.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity_membership.web.Areas.Admin.Controllers
 {
-
+    [Authorize(Roles = "Admin, Master-role-action")]
     [Area("Admin")]
     public class HomeController : Controller
     {

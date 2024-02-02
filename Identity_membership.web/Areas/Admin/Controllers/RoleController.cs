@@ -1,12 +1,14 @@
 ﻿using Identity_membership.web.Areas.Admin.Models;
 using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity_membership.web.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin, Master-role-action")]
     [Area("Admin")]
     public class RoleController : Controller
     {
@@ -20,6 +22,7 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Admin, Master-role-action")]
         public async Task<IActionResult> Index()
         {
 
@@ -32,11 +35,13 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return View(roles);
         }
 
+        [Authorize(Roles = "Admin, Master-role-action")]
         public IActionResult CreateRole()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditRole(string id)
         {
             var roleToEdit = await _roleManager.FindByIdAsync(id);
@@ -49,6 +54,7 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return View(new EditRoleVM() { Id = roleToEdit.Id, Name = roleToEdit!.Name! });
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var roleToDelete = await _roleManager.FindByIdAsync(id);
@@ -70,6 +76,7 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return RedirectToAction(nameof(RoleController.Index));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> EditRole(EditRoleVM req)
         {
@@ -90,6 +97,7 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Master-role-action")]
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleVM req)  
         {
@@ -107,6 +115,7 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return RedirectToAction(nameof(RoleController.Index));
         }
 
+        [Authorize(Roles = "Admin, Master-role-action")]
         public async Task<IActionResult> AssignRoleToUser(string id)
         {
             var user = (await _userManager.FindByIdAsync(id))!;
@@ -133,6 +142,7 @@ namespace Identity_membership.web.Areas.Admin.Controllers
             return View(roleVMList);
         }
 
+        [Authorize(Roles = "Admin, Master-role-action")]
         [HttpPost]
         public async Task<IActionResult> AssignRoleToUser(string userId, List<AssignRoleToUserVM> reqList)
         {
