@@ -1,7 +1,9 @@
+using Identity_membership.web.ClaimProviders;
 using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
 using Identity_membership.web.OptionsModels;
 using Identity_membership.web.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +32,18 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddIdentityExtensions();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+//Claim provider implementation
+builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
+
+//claim policy based authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AfyonPolicy", policy =>
+    {
+        policy.RequireClaim("city", "Afyonkarahisar");
+    });
+});
 
 builder.Services.ConfigureApplicationCookie(opt =>
 {

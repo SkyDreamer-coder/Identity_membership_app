@@ -1,7 +1,10 @@
 ﻿@using System.Security.Claims;
 @if (User.Identity!.IsAuthenticated)
-{
+{      
     <ul class="navbar-nav me-0">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="AfyonPage">Afyon Sayfası</a>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 @User.Identity.Name
@@ -10,6 +13,7 @@
                 <li><a class="dropdown-item"  asp-controller="Member" asp-action="Index">Profil</a></li>
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="PasswordChange">Şifre Değiştir</a></li>
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="UserEdit">Profil Bilgileri Güncelle</a></li>
+                <li><a class="dropdown-item" asp-controller="Member" asp-action="Claims">Claims</a></li>
                 @if (User.HasClaim(x => x.Type == ClaimTypes.Role && x.Value == "Admin" || x.Value == "Master-role-action"))
                 {
                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Ayarları</a></li>

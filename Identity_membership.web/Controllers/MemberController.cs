@@ -160,7 +160,27 @@ namespace Identity_membership.web.Controllers
         {
             await _signInManager.SignOutAsync();
         }
-        
+
+        [HttpGet]
+        public IActionResult Claims()
+        {
+            var userClaimLİst = User.Claims.Select(x => new ClaimVM()
+            {
+                Issuer = x.Issuer,
+                Type = x.Type,
+                Value = x.Value
+            }).ToList();
+
+            return View(userClaimLİst);
+        }
+
+        [Authorize(Policy = "AfyonPolicy")]
+        [HttpGet]
+        public IActionResult AfyonPage()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied(string ReturnUrl)
         {
             string message = string.Empty;
