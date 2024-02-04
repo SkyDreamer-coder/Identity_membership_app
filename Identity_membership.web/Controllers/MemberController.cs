@@ -181,6 +181,13 @@ namespace Identity_membership.web.Controllers
             return View();
         }
 
+        [Authorize(Policy = "ExchangePolicy")]
+        [HttpGet]
+        public IActionResult ExchangePage()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied(string ReturnUrl)
         {
             string message = string.Empty;

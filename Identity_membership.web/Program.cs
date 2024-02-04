@@ -2,8 +2,10 @@ using Identity_membership.web.ClaimProviders;
 using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
 using Identity_membership.web.OptionsModels;
+using Identity_membership.web.Requirements;
 using Identity_membership.web.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,12 +38,21 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 //Claim provider implementation
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 
+//ExchangeExpireRequirementHandler and !!!(IAuthorizationHandler)!!! reference relate
+builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
+
 //claim policy based authorization
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AfyonPolicy", policy =>
     {
         policy.RequireClaim("city", "Afyonkarahisar");
+    });
+
+    //exchange expire date elimination
+    options.AddPolicy("ExchangePolicy", policy =>
+    {
+        policy.AddRequirements(new ExchangeExpireRequirement());
     });
 });
 
