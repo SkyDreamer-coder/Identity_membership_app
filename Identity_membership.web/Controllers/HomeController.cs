@@ -7,6 +7,7 @@ using Identity_membership.web.Extensions;
 using Microsoft.AspNetCore.SignalR;
 using Identity_membership.web.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Identity_membership.web.Controllers
 {
@@ -94,19 +95,28 @@ namespace Identity_membership.web.Controllers
                 return View();
             }
 
-            var result = await _userManager.CreateAsync(new() { UserName = req.UserName, PhoneNumber = req.Phone, Email = req.Email }, req.PasswordConfirm);
+            var signUpResult = await _userManager.CreateAsync(new() { UserName = req.UserName, PhoneNumber = req.Phone, Email = req.Email }, req.PasswordConfirm);
 
-            if (result.Succeeded)
+            if (!signUpResult.Succeeded)
             {
-                TempData["SuccessMessage"] = "Üyelik iþlemi baþarýyla gerçekleþti.";
-                return RedirectToAction(nameof(HomeController.SignIn));
+                ModelState.AddModelErrorList(signUpResult.Errors.Select(x => x.Description).ToList());
+                return View();
+            }
+            //Generating Claim.
+            var exchangeExpireClaim = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(10).ToString());
+            var user = (await _userManager.FindByNameAsync(req.UserName))!;
+
+            var claimResult = await _userManager.AddClaimAsync(user, exchangeExpireClaim);
+
+            if (!claimResult.Succeeded)
+            {
+                ModelState.AddModelErrorList(claimResult.Errors.Select(x => x.Description).ToList());
+                return View();
             }
 
-
-            ModelState.AddModelErrorList(result.Errors.Select(x => x.Description).ToList());
-
-
-            return View();
+            TempData["SuccessMessage"] = "Üyelik iþlemi baþarýyla gerçekleþti.";
+            return RedirectToAction(nameof(HomeController.SignIn));
+;
         }
 
         public IActionResult ForgotPassword()
