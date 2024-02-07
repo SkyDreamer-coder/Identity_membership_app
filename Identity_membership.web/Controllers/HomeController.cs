@@ -69,21 +69,24 @@ namespace Identity_membership.web.Controllers
 
             var result = await _signInManager.PasswordSignInAsync(userVal, req.Password, req.RememberMe, true);
 
-            if (result.Succeeded)
-            {
-                //return RedirectToAction("Index", "Member");
-                return Redirect(returnUrl!);
-            }
-
             if (result.IsLockedOut)
             {
                 ModelState.AddModelErrorList(new List<string>() { "Ard arda 3 kere hatalý giriþ yaptýnýz. Hesabýnýz geçici olarak kilitlendi." });
                 return View();
             }
 
-            ModelState.AddModelErrorList(new List<string>() { $"Email veya þifre yanlýþ", $"Baþarýsýz giriþ sayýsý = {await _userManager.GetAccessFailedCountAsync(userVal)} / {_userManager.Options.Lockout.MaxFailedAccessAttempts}." });
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelErrorList(new List<string>() { $"Email veya þifre yanlýþ", $"Baþarýsýz giriþ sayýsý = {await _userManager.GetAccessFailedCountAsync(userVal)} / {_userManager.Options.Lockout.MaxFailedAccessAttempts}." });
+                return View();
+            }
 
-            return View();
+            if (userVal.BirthDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(userVal, req.RememberMe, new[] { new Claim("birthdate", userVal.BirthDate.Value.ToString()) });
+            }
+            return Redirect(returnUrl!);
+          
         }
 
         [HttpPost]

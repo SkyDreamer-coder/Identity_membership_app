@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
+using System.Security.Claims;
 
 namespace Identity_membership.web.Controllers
 {
@@ -139,7 +140,15 @@ namespace Identity_membership.web.Controllers
 
             await _userManager.UpdateSecurityStampAsync(user);
             await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(user, true);
+
+            if (req.BirtDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(user, true, new[] { new Claim("birthdate", user.BirthDate.Value.ToString()) });
+            }
+            else
+            {
+                await _signInManager.SignInAsync(user, true);
+            }                                        
 
             TempData["SuccessMessage"] = "Profil bilgileri başarıyla değiştirilmiştir.";
 
@@ -184,6 +193,13 @@ namespace Identity_membership.web.Controllers
         [Authorize(Policy = "ExchangePolicy")]
         [HttpGet]
         public IActionResult ExchangePage()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "ViolencePolicy")]
+        [HttpGet]
+        public IActionResult ViolencePage()
         {
             return View();
         }

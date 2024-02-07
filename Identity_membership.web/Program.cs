@@ -41,6 +41,8 @@ builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 //ExchangeExpireRequirementHandler and !!!(IAuthorizationHandler)!!! reference relate
 builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
 
+builder.Services.AddScoped<IAuthorizationHandler, ViolenceRequirementHandler>();
+
 //claim policy based authorization
 builder.Services.AddAuthorization(options =>
 {
@@ -53,6 +55,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ExchangePolicy", policy =>
     {
         policy.AddRequirements(new ExchangeExpireRequirement());
+    });
+
+    //birth date policy authorization
+    options.AddPolicy("ViolencePolicy", policy =>
+    {
+        policy.AddRequirements(new ViolenceRequirement() { ThresholdAge = 18 });
     });
 });
 
