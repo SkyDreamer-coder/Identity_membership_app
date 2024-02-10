@@ -3,6 +3,7 @@ using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
 using Identity_membership.web.OptionsModels;
 using Identity_membership.web.Requirements;
+using Identity_membership.web.Seeds;
 using Identity_membership.web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -84,6 +85,13 @@ builder.Services.ConfigureApplicationCookie(opt =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<UserRoleApp>>();
+
+    await PermissionSeed.Seed(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

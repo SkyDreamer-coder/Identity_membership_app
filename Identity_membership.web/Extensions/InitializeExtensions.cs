@@ -12,7 +12,7 @@ namespace Identity_membership.web.Extensions
 
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
             {
-                opt.TokenLifespan = TimeSpan.FromHours(2);
+                opt.TokenLifespan = TimeSpan.FromMinutes(15);
             });
 
             services.AddIdentity<UserApp, UserRoleApp>(options =>
@@ -26,7 +26,7 @@ namespace Identity_membership.web.Extensions
 
 
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
-                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.MaxFailedAccessAttempts = 4;
 
             }).AddPasswordValidator<PasswordValidator>()
             .AddUserValidator<UserValidator>()
