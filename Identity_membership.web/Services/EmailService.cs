@@ -1,5 +1,4 @@
-﻿
-using Identity_membership.web.OptionsModels;
+﻿using Identity_membership.Core.OptionsModels;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;

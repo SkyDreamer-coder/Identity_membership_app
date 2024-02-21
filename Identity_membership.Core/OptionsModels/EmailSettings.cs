@@ -1,4 +1,4 @@
-﻿namespace Identity_membership.web.OptionsModels
+﻿namespace Identity_membership.Core.OptionsModels
 {
     public class EmailSettings
     {

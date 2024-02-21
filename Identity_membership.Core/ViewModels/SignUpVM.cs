@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity_membership.web.ViewModels
+namespace Identity_membership.Core.ViewModels
 {
     public class SignUpVM
     {

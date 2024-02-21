@@ -1,4 +1,4 @@
-﻿namespace Identity_membership.web.Permissions
+﻿namespace Identity_membership.Core.Permissions
 {
     public static class Permission
     {

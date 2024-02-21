@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-
+using Identity_membership.Core.Models;
 namespace Identity_membership.web.Models
 {
     public class UserApp:IdentityUser

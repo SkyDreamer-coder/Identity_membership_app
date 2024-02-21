@@ -1,7 +1,7 @@
 using Identity_membership.web.ClaimProviders;
 using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
-using Identity_membership.web.OptionsModels;
+using Identity_membership.Core.OptionsModels;
 using Identity_membership.web.Requirements;
 using Identity_membership.web.Seeds;
 using Identity_membership.web.Services;
@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);

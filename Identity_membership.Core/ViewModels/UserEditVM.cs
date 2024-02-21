@@ -1,7 +1,8 @@
-﻿using Identity_membership.web.Models;
+﻿using Identity_membership.Core.Models;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity_membership.web.ViewModels
+namespace Identity_membership.Core.ViewModels
 {
     public class UserEditVM
     {

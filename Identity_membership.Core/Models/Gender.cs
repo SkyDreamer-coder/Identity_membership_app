@@ -1,4 +1,4 @@
-﻿namespace Identity_membership.web.Models
+﻿namespace Identity_membership.Core.Models
 {
     public enum Gender:byte
     {

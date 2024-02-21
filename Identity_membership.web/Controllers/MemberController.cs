@@ -1,6 +1,7 @@
 ﻿using Identity_membership.web.Extensions;
 using Identity_membership.web.Models;
-using Identity_membership.web.ViewModels;
+using Identity_membership.Core.ViewModels;
+using Identity_membership.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
