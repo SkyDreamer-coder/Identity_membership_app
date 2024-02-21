@@ -4,7 +4,7 @@ using Identity_membership.Repository.Models;
 using Identity_membership.Core.OptionsModels;
 using Identity_membership.web.Requirements;
 using Identity_membership.web.Seeds;
-using Identity_membership.web.Services;
+using Identity_membership.Service.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +45,8 @@ builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
 
 builder.Services.AddScoped<IAuthorizationHandler, ViolenceRequirementHandler>();
+
+builder.Services.AddScoped<IMemberService, MemberService>();
 
 //claim policy based authorization
 builder.Services.AddAuthorization(options =>

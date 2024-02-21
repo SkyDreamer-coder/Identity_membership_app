@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Identity_membership.web.Extensions;
 using Microsoft.AspNetCore.SignalR;
-using Identity_membership.web.Services;
+using Identity_membership.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 

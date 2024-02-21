@@ -1,4 +1,4 @@
-﻿namespace Identity_membership.web.Services
+﻿namespace Identity_membership.Service.Services
 {
     public interface IEmailService
     {

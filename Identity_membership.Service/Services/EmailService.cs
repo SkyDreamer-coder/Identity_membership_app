@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
-namespace Identity_membership.web.Services
+namespace Identity_membership.Service.Services
 {
     public class EmailService : IEmailService
     {

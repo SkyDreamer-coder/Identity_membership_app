@@ -3,7 +3,14 @@
     ViewData["Title"] = "Index";
 }
 @model Identity_membership.Core.ViewModels.UserVM
-
+<div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-info" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+</div>
 <div class="row">
     <div class="col-md-6 offset-md-3 text-center">
         <user-picture-thumbnail class="rounded" style="width:400px" picture-url="@Model.PictureUrl"></user-picture-thumbnail>
