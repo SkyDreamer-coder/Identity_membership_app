@@ -1,6 +1,6 @@
 using Identity_membership.web.ClaimProviders;
 using Identity_membership.web.Extensions;
-using Identity_membership.web.Models;
+using Identity_membership.Repository.Models;
 using Identity_membership.Core.OptionsModels;
 using Identity_membership.web.Requirements;
 using Identity_membership.web.Seeds;
@@ -18,7 +18,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"),opt=>
+    {
+        opt.MigrationsAssembly("Identity_membership.Repository");
+    });
 });
 
 

@@ -1,5 +1,5 @@
 ﻿using Identity_membership.web.Extensions;
-using Identity_membership.web.Models;
+using Identity_membership.Repository.Models;
 using Identity_membership.Core.ViewModels;
 using Identity_membership.Core.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -73,7 +73,7 @@ namespace Identity_membership.web.Controllers
 
             TempData["SuccessMessage"] = "Şifreniz başarıyla değiştirilmiştir.";
 
-            return View();
+            return RedirectToAction("Index", "Member");
         }
 
         public async Task<IActionResult> UserEdit()

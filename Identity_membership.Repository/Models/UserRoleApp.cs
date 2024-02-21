@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Identity_membership.web.Models
+namespace Identity_membership.Repository.Models
 {
     public class UserRoleApp:IdentityRole
     {

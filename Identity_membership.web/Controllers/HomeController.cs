@@ -1,4 +1,4 @@
-using Identity_membership.web.Models;
+using Identity_membership.Repository.Models;
 using Identity_membership.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

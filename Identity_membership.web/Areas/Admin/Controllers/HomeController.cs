@@ -1,5 +1,5 @@
 ﻿using Identity_membership.web.Areas.Admin.Models;
-using Identity_membership.web.Models;
+using Identity_membership.Repository.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 ﻿using Identity_membership.web.CustomValidations;
 using Identity_membership.web.Localizations;
-using Identity_membership.web.Models;
+using Identity_membership.Repository.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity_membership.web.Extensions
