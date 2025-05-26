@@ -1,15 +1,14 @@
 using Identity_membership.web.ClaimProviders;
 using Identity_membership.web.Extensions;
-using Identity_membership.web.Models;
-using Identity_membership.web.OptionsModels;
+using Identity_membership.Repository.Models;
+using Identity_membership.Core.OptionsModels;
 using Identity_membership.web.Requirements;
 using Identity_membership.web.Seeds;
-using Identity_membership.web.Services;
+using Identity_membership.Service.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +18,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"),opt=>
+    {
+        opt.MigrationsAssembly("Identity_membership.Repository");
+    });
 });
 
 
@@ -43,6 +45,8 @@ builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
 
 builder.Services.AddScoped<IAuthorizationHandler, ViolenceRequirementHandler>();
+
+builder.Services.AddScoped<IMemberService, MemberService>();
 
 //claim policy based authorization
 builder.Services.AddAuthorization(options =>

@@ -1,4 +1,4 @@
-﻿using Identity_membership.web.Models;
+﻿using Identity_membership.Repository.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
